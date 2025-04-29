@@ -24,7 +24,12 @@ var init = function (window) {
         var circle;
         var circles = []; 
         // TODO 2 : Create a function that draws a circle 
-        function exampleFunction() {
+        function exampleFunction() { circle = draw.randomCircleInArea(canvas, true, true, "#999", 2);  // Random circle in area
+            physikz.addRandomVelocity(circle, canvas, 5, 5);  // Random velocity
+            view.addChild(circle);  // Add circle to the view
+            circles.push(circle);  // Push circle to the circles array
+        }
+
 
         }
 
@@ -111,8 +116,7 @@ var init = function (window) {
         game.update = update;
         
         app.addUpdateable(window.opspark.game);
-    }
-};
+    
 
 // DON'T REMOVE THIS CODE //////////////////////////////////////////////////////
 if((typeof process !== 'undefined') &&
