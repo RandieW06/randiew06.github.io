@@ -3,12 +3,10 @@ var init = function (window) {
     var 
         draw = window.opspark.draw,
         physikz = window.opspark.racket.physikz,
-        
         app = window.opspark.makeApp(),
         canvas = app.canvas, 
         view = app.view,
         fps = draw.fps('#000');
-        
     
     window.opspark.makeGame = function() {
         
@@ -20,24 +18,21 @@ var init = function (window) {
         ////////////////////////////////////////////////////////////
         
         // TODO 1 : Declare and initialize our variables
-        // TODO 1: Declare our variables
-        var circle;
-        var circles = []; 
+        var circle; // variable to hold a single circle when creating circles / iterating
+        var circles = []; // variable to store all circles in an array
+
         // TODO 2 : Create a function that draws a circle 
-        function exampleFunction() { circle = draw.randomCircleInArea(canvas, true, true, "#999", 2);  // Random circle in area
-            physikz.addRandomVelocity(circle, canvas, 5, 5);  // Random velocity
+        function drawCircle() {
+            circle = draw.randomCircleInArea(canvas, true, true, "#999", 2);  // Random circle in area
+            physikz.addRandomVelocity(circle, canvas, 5, 6);  // Random velocity
             view.addChild(circle);  // Add circle to the view
             circles.push(circle);  // Push circle to the circles array
         }
 
-
+        // TODO 3 / 7 : Call the drawCircle() function 5 times
+        for (var i = 0; i < 1000; i++) {
+            drawCircle();
         }
-
-        // TODO 3 / 7 : Call the drawCircle() function 
-        circle = draw.randomCircleInArea(canvas, true, true, "#999", 2);
-        physikz.addRandomVelocity(circle, canvas, 5, 5);
-        view.addChild(circle);
-        circles.push(circle);  
 
         ////////////////////////////////////////////////////////////
         ///////////////// PROGRAM LOGIC ////////////////////////////
@@ -50,23 +45,17 @@ var init = function (window) {
         */
         function update() {
             // TODO 4 : Update the circle's position //
-            circles[0]
-            physikz.updatePosition(/* bracket notation to access a circle from the circles array */);
-            physikz.updatePosition(/* bracket notation to access the first circle */);
-            physikz.updatePosition(/* bracket notation to access the second circle */);
-            physikz.updatePosition(/* bracket notation to access the third circle */);
-            physikz.updatePosition(/* bracket notation to access the fourth circle */);
-            physikz.updatePosition(/* bracket notation to access the fifth circle */);
+            for (var i = 0; i < circles.length; i++) {
+                physikz.updatePosition(circles[i]);  // Update position for each circle
+            }
+
             // TODO 5 / 10 : Call game.checkCirclePosition() on your circles.
-            game.checkCirclePosition(/* bracket notation to access the first circle */);
-            game.checkCirclePosition(/* bracket notation to access the second circle */);
-            game.checkCirclePosition(/* bracket notation to access the third circle */);
-            game.checkCirclePosition(/* bracket notation to access the fourth circle */);
-            game.checkCirclePosition(/* bracket notation to access the fifth circle */);
+            for (var i = 0; i < circles.length; i++) {
+                game.checkCirclePosition(circles[i]);  // Check position for each circle
+            }
 
             // TODO 9 : Iterate over the array
-           
-            
+            // Done in the loops above
         }
     
         /* 
@@ -77,11 +66,11 @@ var init = function (window) {
         game.checkCirclePosition = function(circle) {
 
             // if the circle has gone past the RIGHT side of the screen then place it on the LEFT
-            if ( circle.x > canvas.width ) {
-                circle.x = 0;
+            if (circle.x > canvas.width) {
+                circle.x = 0;  // Move to the left side
             }
-            
-            // TODO 6 : YOUR CODE STARTS HERE //////////////////////
+
+            // TODO 6 : Handle circles exiting other boundaries
             // Left Boundary
             if (circle.x < 0) {
                 circle.x = canvas.width;  // Move to the right side
@@ -97,11 +86,6 @@ var init = function (window) {
                 circle.y = 0;  // Move to the top side
             }
         }
-
-
-
-            // YOUR TODO 6 CODE ENDS HERE //////////////////////////
-        }
         
         /////////////////////////////////////////////////////////////
         // --- NO CODE BELOW HERE  --- DO NOT REMOVE THIS CODE --- //
@@ -116,11 +100,14 @@ var init = function (window) {
         game.update = update;
         
         app.addUpdateable(window.opspark.game);
-    
+    }
+};
 
 // DON'T REMOVE THIS CODE //////////////////////////////////////////////////////
-if((typeof process !== 'undefined') &&
+if ((typeof process !== 'undefined') &&
     (typeof process.versions.node !== 'undefined')) {
     // here, export any references you need for tests //
     module.exports = init;
 }
+
+
