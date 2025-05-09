@@ -1,203 +1,102 @@
 <!DOCTYPE html>
-
 <html>
 
-
 <head>
+  <meta charset="utf-8">
+  <title>Bouncing Box</title>
+  <script src="jquery.min.js"></script>
+  <style>
+    .box {
+      width: 70px;
+      height: 70px;
+      background-color: rgb(64, 71, 76);
+      font-size: 300%;
+      text-align: center;
+      user-select: none;
+      display: block;
+      position: absolute;
+      top: 100px;
+      /* Change me! */
+      left: 0px;
+    }
 
-   <meta charset="utf-8">
-
-   <title>Bouncing Box</title>
-
-   <script src="jquery.min.js"></script>
-
-   <style>
-
-       .box {
-
-           width: 70px;
-
-           height: 70px;
-
-           background-color: rgb(102, 10, 215);
-
-           font-size: 300%;
-
-           text-align: center;
-
-           user-select: none;
-
-           display: block;
-
-           position: absolute;
-
-           top: 100px;
-
-           left: 0px;
-
-       }
-
-
-       .board {
-
-           height: 100vh;
-
-       }
-
-   </style>
-
+    .board {
+      height: 100vh;
+    }
+  </style>
+  <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
 </head>
 
-
 <body class="board">
-
-   <!-- HTML for the box -->
-
-   <div class="box">?</div>
-
-
-   <script>
-
-       (function () {
-
-           'use strict'
-
-           /* global jQuery */
-
-
-           //////////////////////////////////////////////////////////////////
-
-           /////////////////// SETUP DO NOT DELETE //////////////////////////
-
-           //////////////////////////////////////////////////////////////////
-
-
-           var box = jQuery('.box');   // reference to the HTML .box element
-
-           var board = jQuery('.board');   // reference to the HTML .board element
-
-           var boardWidth = board.width(); // the maximum X-Coordinate of the screen
-
-
-           // Every 50 milliseconds, call the update Function (see below)
-
-           setInterval(update, 50);
-
-
-           // Every time the box is clicked, call the handleBoxClick Function (see below)
-
-           box.on('click', handleBoxClick);
-
-
-           // moves the Box to a new position on the screen along the X-Axis
-
-           function moveBoxTo(newPositionX) {
-
-               box.css("left", newPositionX);
-
-           }
-
-
-           // changes the text displayed on the Box
-
-           function changeBoxText(newText) {
-
-               box.text(newText);
-
-           }
-
-
-           //////////////////////////////////////////////////////////////////
-
-           /////////////////// YOUR CODE BELOW HERE /////////////////////////
-
-           //////////////////////////////////////////////////////////////////
-
-
-           // TODO 2 - Variable declarations
-
-           var speed = 5; // Speed of the box movement
-
-           var positionX = 0; // Current X position of the box
-
-           var direction = 1; // Direction of movement: 1 = right, -1 = left
-
-           var points = 0; // Player score
-
-          
-
-
-           /*
-
-           This Function will be called 20 times/second. Each time it is called,
-
-           it should move the Box to a new location. If the box drifts off the screen
-
-           turn it around!
-
-           */
-
-           function update() {
-
-               // Move the box based on speed and direction
-
-               positionX += speed * direction;
-
-
-               // If the box goes beyond the right edge of the screen, reverse direction
-
-               if (positionX + box.width() >= boardWidth || positionX <= 0) {
-
-                   direction *= -1; // Reverse the direction
-
-               }
-
-
-               // Update the box position
-
-               moveBoxTo(positionX);
-
-           };
-
-
-           /*
-
-           This Function will be called each time the box is clicked. Each time it is called,
-
-           it should increase the points total, increase the speed, and move the box to
-
-           the left side of the screen.
-
-           */
-
-           function handleBoxClick() {
-
-               // Increase score and speed
-
-               points += 1;
-
-               speed += 1; // Increase speed by 1 each time
-
-
-               // Move the box to the left side of the screen (position X = 0)
-
-               positionX = 0;
-
-               moveBoxTo(positionX);
-
-
-               // Update the box text to show the current score
-
-               changeBoxText(score);
-
-           };
-
-
-       })();
-
-   </script>
-
+  <!-- HTML for the box -->
+  <div class="box">?</div>
+
+  <script>
+    (function () {
+      'use strict'
+      /* global jQuery */
+
+      //////////////////////////////////////////////////////////////////
+      /////////////////// SETUP DO NOT DELETE /////////////////////////
+      //////////////////////////////////////////////////////////////////
+
+      var box = jQuery('.box');    // reference to the HTML .box element
+      var board = jQuery('.board');  // reference to the HTML .board element
+      var boardWidth = board.width();  // the maximum X-Coordinate of the screen
+
+      // Every 50 milliseconds, call the update Function (see below)
+      setInterval(update, 50);
+
+      // Every time the box is clicked, call the handleBoxClick Function (see below)
+      box.on('click', handleBoxClick);
+
+      // moves the Box to a new position on the screen along the X-Axis
+      function moveBoxTo(newPositionX) {
+        box.css("left", newPositionX);
+      }
+
+      // changes the text displayed on the Box
+      function changeBoxText(newText) {
+        box.text(newText);
+      }
+
+      //////////////////////////////////////////////////////////////////
+      /////////////////// YOUR CODE BELOW HERE /////////////////////////
+      //////////////////////////////////////////////////////////////////
+
+      // TODO 2 - Variable declarations
+      var positionX = 0;  // This will track the x-position of the box
+      var points = 0;     // This will track the number of times the box is clicked
+      var speed = 10;     // This controls how fast the box moves
+
+      // TODO 1: Call the moveBoxTo function inside the update function
+      function update() {
+        positionX = positionX + speed; // Move box based on speed
+
+        // Check if the box is past the right boundary
+        if (positionX > boardWidth) {
+          speed *= -1; // Reverse direction to the left
+        }
+
+        // Check if the box is past the left boundary
+        if (positionX < 0) {
+          speed *= -1; // Reverse direction to the right
+        }
+
+        moveBoxTo(positionX); // Update box position based on positionX
+      }
+
+      // TODO 3: handleBoxClick function
+      function handleBoxClick() {
+        positionX = 0;         // Reset positionX to 0 when clicked
+        points++;              // Increment the points by 1
+        speed = 3 * points + 10;  // Update the speed using a linear formula based on points
+        changeBoxText(points);  // Display the updated points on the box
+      }
+
+    })();
+  </script>
 </body>
 
-
 </html>
+
